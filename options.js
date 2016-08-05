@@ -1,8 +1,8 @@
 "use strict";
 
 document.addEventListener('DOMContentLoaded', function() {
-
-    chrome.storage.sync.get(null, function(prefs) 
+    const storage = (chrome.storage.sync ? chrome.storage.sync : chrome.storage.local);
+    storage.get(null, function(prefs) 
     {
         document.getElementById("cbRotateImages").checked = !(prefs && (false === prefs["bRotateNonSecureImages"]));
         document.getElementById("cbWarnOnNonSecureDownloads").checked = (prefs && (true === prefs["bWarnOnNonSecureDownloads"]));
@@ -20,7 +20,8 @@ function saveChanges() {
     status.textContent = "Saving...";
     const cbRotateImages = document.getElementById("cbRotateImages");
     const cbWarnOnNonSecureDownloads = document.getElementById("cbWarnOnNonSecureDownloads");
-    chrome.storage.sync.set({"bRotateNonSecureImages": cbRotateImages.checked, 
+    const storage = (chrome.storage.sync ? chrome.storage.sync : chrome.storage.local);
+    storage.set({"bRotateNonSecureImages": cbRotateImages.checked, 
                              "bWarnOnNonSecureDownloads": cbWarnOnNonSecureDownloads.checked}, null);
 
     status.textContent = "Saved";
