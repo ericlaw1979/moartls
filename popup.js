@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const lnkDomain = document.getElementById("lnkDomain");
         lnkDomain.href = "https://dev.ssllabs.com/ssltest/analyze.html?d=" + escape(oUri.hostname);
-        lnkDomain.innerText = (((sProt == "http:") || (sProt =="ftp:")) ? (sProt.slice(0,-1)+"/") : "") + oUri.hostname;
+        lnkDomain.textContent = (((sProt == "http:") || (sProt =="ftp:")) ? (sProt.slice(0,-1)+"/") : "") + oUri.hostname;
 
         {
             document.getElementById("txtStatus").textContent = "Analyzing top-level page";
@@ -232,7 +232,7 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
     const bAnyInsecure = (cTotalUnsecure > 0);
 
-    document.getElementById("txtStatus").innerText = computeDisplayString(cTotalUnsecure, cTotalLinks);
+    document.getElementById("txtStatus").textContent = computeDisplayString(cTotalUnsecure, cTotalLinks);
     if (bAnyInsecure) {
         document.body.style.backgroundColor = "#FFFF40";
         document.getElementById("lnkUnmark").style.display="inline";
