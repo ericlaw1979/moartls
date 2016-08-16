@@ -43,7 +43,9 @@
           const thisForm = forms[i];
           if (thisForm.getAttribute("action")[0] === "#") continue; // Not a cross-page 'action'
           cLinks++;
-          const sUri = thisForm.action.toLowerCase();
+          const sUri = (typeof thisForm.action === "string") ? 
+                                                    thisForm.action.toLowerCase() 
+                                                  : thisForm.getAttribute("action").toLowerCase();
           if (sUri.startsWith("http:"))
           {
             arrUnsecure.push(sUri);
@@ -73,5 +75,5 @@
     // We always need to send a report or else popup.js
     // can't know when analysis is complete.
     const obj = {cLinks: cLinks, unsecure: arrUnsecure };
-    chrome.runtime.sendMessage(obj, null);
+    chrome.runtime.sendMessage(obj);
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-if (typeof(chrome.runtime) === "undefined") chrome = browser;
+if (typeof chrome.runtime === "undefined") chrome = browser;
 
 document.addEventListener('DOMContentLoaded', function() {
     {
