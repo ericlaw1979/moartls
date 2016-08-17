@@ -7,4 +7,8 @@ Learn more about the extension in the [Announcement Blog Post](https://textplain
 
 You can install the Chrome extension from the [Chrome WebStore](https://chrome.google.com/webstore/detail/moartls-analyzer/ldfbacdbackkjhclmhnjabngnppnkagh)
 
-Opera/Firefox/Edge versions coming soon.
+You can install the Firefox extension from the [Mozilla Addons site](https://addons.mozilla.org/en-US/firefox/addon/moartls/?src=cb-dl-rating)
+
+Edge version coming soon.
+
+Extension works with Opera but they rejected the extension because they don't like mention of "Chrome"
