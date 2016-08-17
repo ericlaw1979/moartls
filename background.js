@@ -19,7 +19,7 @@ chrome.downloads.onCreated.addListener(function(item) {
                 (item.referrer && item.referrer.substring(0, 5) == "http:"))
             {
                 var sReferer = (item.referrer) ? ("\n\nvia\n\n  " + item.referrer) : "";
-                alert("Download of: \n\n  " + item.url + sReferer + "\n");
+                alert("Non-secure download of: \n\n  " + item.url + sReferer + "\n");
             }
         });
     }
