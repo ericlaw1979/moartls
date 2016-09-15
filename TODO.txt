@@ -1,4 +1,23 @@
-if (typeof msBrowser !== 'undefined') { chrome = msBrowser; } else if (typeof browser != 'undefined') {	chrome = browser;} 
+HTTP BAD - Detect CC and Password
+
+Password is easy:
+	document.querySelectorAll("* /deep/ input[type='password']");
+
+Credit card is complex:
+	https://cs.chromium.org/chromium/src/components/autofill/core/browser/autofill_regex_constants.cc?sq=package:chromium&dr=CSs&rcl=1473923811&l=140
+
+
+
+
+
+
+
+
+
+
+=================
+
+if (typeof msBrowser !== 'undefined') { chrome = msBrowser; } else if (typeof browser !== 'undefined') {	chrome = browser;} 
 
 scroll link into view
 run CSS / HTML / Script lint
