@@ -14,16 +14,26 @@
 
     const arrUnsecure = [];
     let cLinks = 0;
-    
+
     {
         // Entire frame is insecure?
         const sProt = document.location.protocol.toLowerCase();
         if ((document.body) && 
             ((sProt === "http:") || (sProt === "ftp:"))) {
+
               document.body.classList.add("moarTLSUnsecure");
+              let oSensitiveFields = document.querySelectorAll("* /deep/ input[type='password']");
+              if (oSensitiveFields.length > 0)
+              {
+                // TODO: Log field names
+                const uiNotSecure = document.createElement("img");
+                uiNotSecure.src = "https://bayden.com/images/banner.jpg";
+                uiNotSecure.classList.add("moarTLSFieldWarning");
+                document.body.appendChild(uiNotSecure);
+              }
         }
     }
-    
+
     {
         if (chrome.storage)
         {
@@ -70,6 +80,7 @@
             thisLink.classList.add("moarTLSUnsecure");
           }
         }
+
     }
     
     // We always need to send a report or else popup.js

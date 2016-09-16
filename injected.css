@@ -16,6 +16,12 @@ body.moarTLSUnsecure {
   transition: background 1s ease;
 }
 
+img.moarTLSFieldWarning {
+	position: fixed; 
+	left: 94px; 
+	top: 0px;
+}
+
 form.moarTLSUnsecure {
   background: rgba(222, 106, 106, 0.6) !important;
   border-radius: 4px;
