@@ -1,6 +1,8 @@
 "use strict";
 
 {
+    if (typeof chrome === "undefined") var chrome = browser;
+
     function markUnsecureImages()
     {
         const imgs = document.querySelectorAll("img");
@@ -27,9 +29,13 @@
               {
                 // TODO: Log field names
                 const uiNotSecure = document.createElement("img");
-                uiNotSecure.src = "https://bayden.com/images/banner.jpg";
+                uiNotSecure.src = chrome.extension.getURL("/images/SensitiveForm.png");
                 uiNotSecure.classList.add("moarTLSFieldWarning");
                 document.body.appendChild(uiNotSecure);
+
+                for (let i = 0; i < oSensitiveFields.length; i++) {
+                    oSensitiveFields[i].classList.add("moarTLSSensitive");
+                }
               }
         }
     }

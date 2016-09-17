@@ -48,6 +48,10 @@
     "persistent": false
   },
 
+  "web_accessible_resources": [
+    "images/SensitiveForm.png"
+  ],
+
   "permissions": [
     "tabs",
     "activeTab",
