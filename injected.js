@@ -24,9 +24,13 @@
             ((sProt === "http:") || (sProt === "ftp:"))) {
 
               document.body.classList.add("moarTLSUnsecure");
-              let oSensitiveFields = document.querySelectorAll("* /deep/ input[type='password']");
-              if (oSensitiveFields.length > 0)
-              {
+        }
+
+        if (!window.isSecureContext)
+        {
+            let oSensitiveFields = document.querySelectorAll("* /deep/ input[type='password']");
+            if (oSensitiveFields.length > 0)
+            {
                 // TODO: Log field names
                 const uiNotSecure = document.createElement("img");
                 uiNotSecure.src = chrome.extension.getURL("/images/SensitiveForm.png");
@@ -35,8 +39,9 @@
 
                 for (let i = 0; i < oSensitiveFields.length; i++) {
                     oSensitiveFields[i].classList.add("moarTLSSensitive");
+                    oSensitiveFields[i].title = "WARNING: Password Field in a Non-Secure Context";
                 }
-              }
+            }
         }
     }
 
