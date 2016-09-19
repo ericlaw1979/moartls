@@ -8,6 +8,9 @@ Credit card is complex:
 
 
 
+        chrome.management.getSelf( (o) => {
+            lnkVersion.textContent = lnkVersion.textContent + o.installType;		<-- "development" if self-installed
+            } );
 
 
 
