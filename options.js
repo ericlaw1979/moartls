@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     {
         document.getElementById("cbRotateImages").checked = !(prefs && (false === prefs["bRotateNonSecureImages"]));
         document.getElementById("cbWarnOnNonSecureDownloads").checked = (prefs && (true === prefs["bWarnOnNonSecureDownloads"]));
+        document.getElementById("cbWarnOnNonSecureDocument").checked = !(prefs && (false === prefs["bWarnOnNonSecureDocument"]));
     });
 
     var checkboxes = document.querySelectorAll("input[type=checkbox]");
@@ -20,9 +21,15 @@ function saveChanges() {
     status.textContent = "Saving...";
     const cbRotateImages = document.getElementById("cbRotateImages");
     const cbWarnOnNonSecureDownloads = document.getElementById("cbWarnOnNonSecureDownloads");
+    const cbWarnOnNonSecureDocument = document.getElementById("cbWarnOnNonSecureDocument");
     const storage = (chrome.storage.sync ? chrome.storage.sync : chrome.storage.local);
-    storage.set({"bRotateNonSecureImages": cbRotateImages.checked, 
-                             "bWarnOnNonSecureDownloads": cbWarnOnNonSecureDownloads.checked}, null);
+    const oSettings =
+                {"bRotateNonSecureImages": cbRotateImages.checked,
+                 "bWarnOnNonSecureDownloads": cbWarnOnNonSecureDownloads.checked,
+                 "bWarnOnNonSecureDocument": cbWarnOnNonSecureDocument.checked
+                };
+    console.log(JSON.stringify(oSettings));
+    storage.set(oSettings, null);
 
     status.textContent = "Saved";
 

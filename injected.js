@@ -13,35 +13,72 @@
             }
         }
     }
+    
+    function markUnsecureDocument()
+    {
+        // Entire frame is unsecure?
+        const sProt = document.location.protocol.toLowerCase();
+        if ((document.body) && 
+            ((sProt === "http:") || (sProt === "ftp:"))) {
+              document.body.classList.add("moarTLSUnsecure");
+        }
+    }
 
     const arrUnsecure = [];
     let cLinks = 0;
 
     {
-        // Entire frame is insecure?
-        const sProt = document.location.protocol.toLowerCase();
-        if ((document.body) && 
-            ((sProt === "http:") || (sProt === "ftp:"))) {
-
-              document.body.classList.add("moarTLSUnsecure");
-        }
-
         if (!window.isSecureContext)
         {
+            let cSensitiveFields = 0;
+
+            // Count Password fields
             let oSensitiveFields = document.querySelectorAll("* /deep/ input[type='password']");
+            cSensitiveFields += oSensitiveFields.length;
+            for (let i = 0; i < oSensitiveFields.length; i++) {
+                console.log("moarTLS Analyzer: Password field in non-secure context; name=" + oSensitiveFields[i].name + "; id=" + oSensitiveFields[i].id);
+                oSensitiveFields[i].classList.add("moarTLSSensitive");
+                oSensitiveFields[i].title = "WARNING: Password Field in a Non-Secure Context";
+            }
+
+            // Count Creditcard fields
+            let ccRegEx = "(add)?(?:card|cc|acct).?(?:number|#|no|num|field)|nummer|credito|numero|número|numéro|カード番号|Номер.*карты|信用卡号|信用卡号码|信用卡卡號|카드";
+            oSensitiveFields = document.querySelectorAll("* /deep/ input[type='text'],input[type='number'],input[type='tel']");
             if (oSensitiveFields.length > 0)
             {
-                // TODO: Log field names
-                const uiNotSecure = document.createElement("img");
-                uiNotSecure.src = chrome.extension.getURL("/images/SensitiveForm.png");
-                uiNotSecure.classList.add("moarTLSFieldWarning");
-                document.body.appendChild(uiNotSecure);
-
+                const oRegEx = new RegExp(ccRegEx, "gi");
                 for (let i = 0; i < oSensitiveFields.length; i++) {
-                    oSensitiveFields[i].classList.add("moarTLSSensitive");
-                    oSensitiveFields[i].title = "WARNING: Password Field in a Non-Secure Context";
+                    let sName = oSensitiveFields[i].name;
+                    if (sName && oRegEx.test(sName)) {
+                        console.log("moarTLS Analyzer: Credit Card field in non-secure context; name=" + oSensitiveFields[i].name + "; id=" + oSensitiveFields[i].id);
+                        cSensitiveFields++;
+                        oSensitiveFields[i].classList.add("moarTLSSensitive");
+                        oSensitiveFields[i].title = "WARNING: Credit Card Field in a Non-Secure Context";
+                    }
                 }
             }
+
+            // If any fields, show the "future" origin chip warning
+            // TODO: Log field names
+            if (cSensitiveFields > 0)
+            {
+                let uiNotSecure = document.getElementById("uiNotSecure");
+                if (uiNotSecure)
+                {
+                    document.getElementById('uiNotSecure').style.visibility = "visible";
+                }
+                else
+                {
+                    uiNotSecure = document.createElement("img");
+                    uiNotSecure.src = chrome.extension.getURL("/images/SensitiveForm.png");
+                    uiNotSecure.classList.add("moarTLSFieldWarning");
+                    uiNotSecure.id="uiNotSecure";
+                    document.body.appendChild(uiNotSecure);
+
+                    uiNotSecure.addEventListener("click", () => { document.getElementById('uiNotSecure').style.visibility = "hidden"; }, null);
+                }
+            }
+
         }
     }
 
@@ -52,6 +89,11 @@
             storage.get("bRotateNonSecureImages", function(obj) {
               if (obj && (false === obj.bRotateNonSecureImages)) return;
               markUnsecureImages();
+            });
+
+            storage.get("bWarnOnNonSecureDocument", function(obj) {
+              if (obj && (false === obj.bWarnOnNonSecureDocument)) return;
+              markUnsecureDocument();
             });
         }
     }
