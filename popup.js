@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const bHSTS = (sHSTS && sHSTS.includes("max-age=") && !sHSTS.includes("max-age=0"));
                     const l = document.getElementById("lnkDomain");
                     if (sProt != "https:") { l.classList.add("pageCanUpgrade"); }
-                    if (bHSTS) { l.classList.add("pageIsHSTS");  l.classList.remove("pageIsHTTPS"); }
+                    if (bHSTS) { l.classList.add("pageIsHSTS"); l.classList.remove("pageIsHTTPS"); }
 
                     const arrLI = htLinks[sOrigin];
                     markLIs(arrLI, true, bHSTS);
@@ -241,7 +241,8 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
     }
     else
     {
-        if (document.getElementById("lnkDomain").classList.contains("pageIsHTTPS"))
+        if (document.getElementById("lnkDomain").classList.contains("pageIsHTTPS") ||
+            document.getElementById("lnkDomain").classList.contains("pageIsHSTS"))
         {
             document.body.style.backgroundColor = "#68FF68";
         }
