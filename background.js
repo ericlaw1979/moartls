@@ -4,23 +4,22 @@
 // https://developer.chrome.com/extensions/event_pages
 
 // Our background page isn't persistent.
-// This seems to cause problems whereby without
-// this handler, we might not have the chance to run
-// our background page logic at all.
-chrome.runtime.onStartup.addListener(()=> { 
-    showIfDevVersion();
-});
+chrome.runtime.onStartup.addListener(()=> { init(); });
+// onInstalled when user uses chrome://extensions page to reload
+chrome.runtime.onInstalled.addListener(() => { init(); });
 
-// Add Badge notification if this is a dev-install
-function showIfDevVersion()
+function init()
 {
-  chrome.management.getSelf( (o)=> {
+  // Add Badge notification if this is a dev-install
+  chrome.management.getSelf( (o)=>{
         if (o.installType === "development") {
           chrome.browserAction.setBadgeText( {text: "dev"} );
-        } } );
+        } 
+  });
 }
-showIfDevVersion(); // Call it!
 
+// TODO: It feels like this should live in the init function above
+// but somehow it works even without that...
 chrome.downloads.onCreated.addListener(function(item) {
     // https://developer.chrome.com/extensions/downloads#type-DownloadItem
     // https://src.chromium.org/viewvc/chrome/trunk/src/chrome/common/extensions/docs/examples/api/downloads/download_manager/background.js
