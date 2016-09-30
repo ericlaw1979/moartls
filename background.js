@@ -1,7 +1,25 @@
 "use strict"
 
-// Background
+// Background page
 // https://developer.chrome.com/extensions/event_pages
+
+// Our background page isn't persistent.
+// This seems to cause problems whereby without
+// this handler, we might not have the chance to run
+// our background page logic at all.
+chrome.runtime.onStartup.addListener(()=> { 
+    showIfDevVersion();
+});
+
+// Add Badge notification if this is a dev-install
+function showIfDevVersion()
+{
+  chrome.management.getSelf( (o)=> {
+        if (o.installType === "development") {
+          chrome.browserAction.setBadgeText( {text: "dev"} );
+        } } );
+}
+showIfDevVersion(); // Call it!
 
 chrome.downloads.onCreated.addListener(function(item) {
     // https://developer.chrome.com/extensions/downloads#type-DownloadItem

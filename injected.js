@@ -49,7 +49,7 @@
                 const oRegEx = new RegExp(ccRegEx, "gi");
                 for (let i = 0; i < oSensitiveFields.length; i++) {
                     let sName = oSensitiveFields[i].name;
-                    if (sName && oRegEx.test(sName)) {
+                    if ((sName && oRegEx.test(sName)) || oSensitiveFields[i].getAttribute("autocomplete")=="cc-number" ) {
                         console.log("moarTLS Analyzer: Credit Card field in non-secure context; name=" + oSensitiveFields[i].name + "; id=" + oSensitiveFields[i].id);
                         cSensitiveFields++;
                         oSensitiveFields[i].classList.add("moarTLSSensitive");
