@@ -28,7 +28,7 @@ img.moarTLSFieldWarning {
   }
   100% {
     background: #FF8000; !important;
-    -webkit-box-shadow: 0 0 10px 1px #FF8000
+    box-shadow: 0 0 15px 1px #FF8000
   }
 }
 
