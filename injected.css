@@ -22,17 +22,18 @@ img.moarTLSFieldWarning {
   top: 0px;
 }
 
-@keyframes pulse {
+@keyframes moarTLSOrangepulse {
   0% {
     background: #FFE7CE; !important;
   }
   100% {
     background: #FF8000; !important;
+    -webkit-box-shadow: 0 0 10px 1px #FF8000
   }
 }
 
 input.moarTLSSensitive {
-  animation: pulse 3s infinite;
+  animation: moarTLSOrangepulse 3s infinite;
 }
 
 form.moarTLSUnsecure {
