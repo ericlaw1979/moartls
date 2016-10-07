@@ -130,7 +130,7 @@ function copyForBug()
     setTimeout(function() { lnkCopyForBug.innerHTML = "Copy"; }, 450);
 }
 
-function computeDisplayString(cInsecure, cTotal)
+function computeLinksDisplayString(cInsecure, cTotal)
 {
     if (cTotal < 1) return "This page does not contain any links.";
     if (cInsecure < 1) {
@@ -143,7 +143,15 @@ function computeDisplayString(cInsecure, cTotal)
         if (cTotal == 2) return "Both links on this page are non-secure.";
         return "All " + cTotal + " links on this page are non-secure.";
     }
-    return (cInsecure + " of " + cTotal + " links " + ((cInsecure == 1) ? "is" : "are") + " non-secure.");
+    let sResult = ("\n"+cInsecure + " of " + cTotal + " links " + ((cInsecure == 1) ? "is" : "are") + " non-secure.");
+    return sResult;
+}
+
+function computeImagesDisplayString(cInsecureImages)
+{
+    if (cInsecureImages < 1) return ""; //"This page does not contain any images.";
+    let sResult = ((cInsecureImages == 1) ? "One image is" : (cInsecureImages + " images are")) + " non-secure.";
+    return sResult;
 }
 
 // Update list UI based on HTTPS/HSTS availability
@@ -151,12 +159,11 @@ function markLIs(arrLI, bHTTPS, bHSTS)
 {
     // No links yet
     if (!arrLI) { return; }
-    for (let i=0; i < arrLI.length; i++)
-    {
+    for (let i=0; i < arrLI.length; i++) {
         if (arrLI[i].textContent.substring(0, 11) == "[Checking] ") {
             arrLI[i].textContent = arrLI[i].textContent.substring(11);
         }
-    
+
         if (bHTTPS) {
             arrLI[i].classList.add("isHTTPSyes");
             if (bHSTS) arrLI[i].classList.add("isHSTS");
@@ -212,7 +219,9 @@ function checkForHTTPS(lnk)
 // Total number of elements evaluated in the page
 var cTotalLinks = 0;
 // Total number of non-secure elements in the page
-var cTotalUnsecure = 0;
+var cLinksUnsecure = 0;
+// Total number of non-secure images in the page
+var cImagesUnsecure = 0;
 // Hashtable mapping Origin->ListItem[]
 var htLinks = {};
 
@@ -227,12 +236,15 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
         return;
     }
 
-    cTotalLinks += request.cLinks || 0;
-    cTotalUnsecure += (request.unsecure) ? request.unsecure.length : 0;
+    cTotalLinks += request.LinkCount || 0;
+    cLinksUnsecure += (request.unsecure) ? request.unsecure.length : 0;
+    cImagesUnsecure += (request.NonSecureImages) ? request.NonSecureImages.length : 0;
 
-    const bAnyInsecure = (cTotalUnsecure > 0);
+    const bAnyInsecure = (cLinksUnsecure + cImagesUnsecure > 0);
 
-    document.getElementById("txtStatus").textContent = computeDisplayString(cTotalUnsecure, cTotalLinks);
+    document.getElementById("txtStatus").textContent = computeLinksDisplayString(cLinksUnsecure, cTotalLinks, cImagesUnsecure);
+    document.getElementById("txtStatus2").textContent = computeImagesDisplayString(cImagesUnsecure);
+
     if (bAnyInsecure) {
         document.body.style.backgroundColor = "#FFFF40";
         document.getElementById("lnkUnmark").style.display="inline";
@@ -249,7 +261,7 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
     }
 
     let listUnsecure = document.getElementById("olUnsecureList");
-    if (!listUnsecure)
+    if (!listUnsecure && bAnyInsecure)
     {
         listUnsecure = document.createElement("ol");
         listUnsecure.id = "olUnsecureList";
@@ -263,6 +275,34 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
         const oUri = document.createElement("a");
         oUri.href = request.unsecure[i];
+        const sOrigin = "https://" + oUri.host +"/";
+        if (undefined === htLinks[sOrigin])
+        {
+            htLinks[sOrigin] = [];
+        }
+        htLinks[sOrigin].push(listItem);
+
+        listItem.addEventListener('click', function(e) { 
+
+            if ((e.altKey || e.ctrlKey) || (1 == e.button))
+            {
+                document.getElementById("lnkTips").style.display = "none";
+                checkForHTTPS(this);
+                return;
+            }
+
+        }, false);
+        listUnsecure.appendChild(listItem);
+    }
+
+
+    for (let i=0; i < request.NonSecureImages.length; i++) {
+        const listItem = document.createElement("li");
+        const text = document.createTextNode(request.NonSecureImages[i]);
+        listItem.appendChild(text);
+
+        const oUri = document.createElement("a");
+        oUri.href = request.NonSecureImages[i];
         const sOrigin = "https://" + oUri.host +"/";
         if (undefined === htLinks[sOrigin])
         {

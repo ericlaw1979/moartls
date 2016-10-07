@@ -3,17 +3,23 @@
 {
     if (typeof chrome === "undefined") var chrome = browser;
 
-    function markUnsecureImages()
+    function findUnsecureImages()
     {
         const imgs = document.querySelectorAll("img");
-        for (let i = 0; i < imgs.length; i++)
-        {
+        for (let i = 0; i < imgs.length; i++) {
             if (imgs[i].src.substring(0,5) === "http:") {
-                imgs[i].classList.add("moarTLSUnsecure");
+                arrNonSecureImages.push(imgs[i]);
             }
         }
     }
-    
+
+    function markUnsecureImages()
+    {
+        for (let i = 0; i < arrNonSecureImages.length; i++) {
+            arrNonSecureImages[i].classList.add("moarTLSUnsecure");
+        }
+    }
+
     function markUnsecureDocument()
     {
         // Entire frame is unsecure?
@@ -25,6 +31,7 @@
     }
 
     const arrUnsecure = [];
+    const arrNonSecureImages = [];
     let cLinks = 0;
 
     {
@@ -82,6 +89,8 @@
         }
     }
 
+    findUnsecureImages();
+
     {
         if (chrome.storage)
         {
@@ -96,8 +105,12 @@
               markUnsecureDocument();
             });
         }
+        else
+        {
+            markUnsecureImages();
+        }
     }
-    
+
     {
         let sSelector = "* /deep/ form[action]";
         if (typeof browser !== 'undefined') sSelector = "form[action]";
@@ -117,7 +130,7 @@
           }
         }
     }
-    
+
     {
         let sSelector = "* /deep/ a[href]";
         if (typeof browser !== 'undefined') sSelector = "a[href]";
@@ -133,11 +146,10 @@
             thisLink.classList.add("moarTLSUnsecure");
           }
         }
-
     }
-    
+
     // We always need to send a report or else popup.js
     // can't know when analysis is complete.
-    const obj = {cLinks: cLinks, unsecure: arrUnsecure };
+    const obj = {LinkCount: cLinks, NonSecureImages: arrNonSecureImages.map(o=>{return o.src}), unsecure: arrUnsecure };
     chrome.runtime.sendMessage(obj);
 }
