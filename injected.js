@@ -11,6 +11,13 @@
                 arrNonSecureImages.push(imgs[i]);
             }
         }
+
+        const imginputs = document.querySelectorAll("input[type='image']");
+        for (let i = 0; i < imginputs.length; i++) {
+            if (imginputs[i].src.substring(0,5) === "http:") {
+                arrNonSecureImages.push(imginputs[i]);
+            }
+        }
     }
 
     function markUnsecureImages()

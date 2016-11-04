@@ -45,6 +45,7 @@ form.moarTLSUnsecure {
   transition: 0.5s ease;
 }
 
+input.moarTLSUnsecure,
 img.moarTLSUnsecure {
   transform:rotate(180deg);
   transition: transform 0.5s ease;
