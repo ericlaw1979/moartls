@@ -41,9 +41,8 @@
     const arrNonSecureImages = [];
     let cLinks = 0;
 
-    {
-        if (!window.isSecureContext)
-        {
+    if (!window.isSecureContext) {
+        try {
             let cSensitiveFields = 0;
 
             // Count Password fields
@@ -92,8 +91,7 @@
                     uiNotSecure.addEventListener("click", () => { document.getElementById('uiNotSecure').style.visibility = "hidden"; }, null);
                 }
             }
-
-        }
+         } catch (e) { console.log('Failed to detect nonsecure inputs. ' + e); }
     }
 
     findUnsecureImages();
