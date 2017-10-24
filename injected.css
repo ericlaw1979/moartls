@@ -16,26 +16,6 @@ body.moarTLSUnsecure {
   transition: background 1s ease;
 }
 
-img.moarTLSFieldWarning {
-  position: fixed;
-  left: 94px;
-  top: 0px;
-}
-
-@keyframes moarTLSOrangepulse {
-  0% {
-    background: #FFE7CE !important;
-  }
-  100% {
-    background: #FF8000 !important;
-    box-shadow: 0 0 15px 1px #FF8000
-  }
-}
-
-input.moarTLSSensitive {
-  animation: moarTLSOrangepulse 3s infinite;
-}
-
 form.moarTLSUnsecure {
   background: rgba(222, 106, 106, 0.6) !important;
   border-radius: 4px;
