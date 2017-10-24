@@ -56,59 +56,6 @@
     const arrNonSecureImages = [];
     let cLinks = 0;
 
-    if (!window.isSecureContext) {
-        try {
-            let cSensitiveFields = 0;
-
-            // Count Password fields
-            let oSensitiveFields = document.querySelectorAll("* /deep/ input[type='password']");
-            cSensitiveFields += oSensitiveFields.length;
-            for (let i = 0; i < oSensitiveFields.length; i++) {
-                console.log("moarTLS Analyzer: Password field in non-secure context; name=" + oSensitiveFields[i].name + "; id=" + oSensitiveFields[i].id);
-                oSensitiveFields[i].classList.add("moarTLSSensitive");
-                oSensitiveFields[i].title = "WARNING: Password Field in a Non-Secure Context";
-            }
-
-            // Count Creditcard fields
-            let ccRegEx = "(add)?(?:card|cc|acct).?(?:number|#|no|num|field)|nummer|credito|numero|número|numéro|カード番号|Номер.*карты|信用卡号|信用卡号码|信用卡卡號|카드";
-            oSensitiveFields = document.querySelectorAll("* /deep/ input[type='text'],input[type='number'],input[type='tel']");
-            if (oSensitiveFields.length > 0)
-            {
-                const oRegEx = new RegExp(ccRegEx, "gi");
-                for (let i = 0; i < oSensitiveFields.length; i++) {
-                    let sName = oSensitiveFields[i].name;
-                    if ((sName && oRegEx.test(sName)) || oSensitiveFields[i].getAttribute("autocomplete")=="cc-number" ) {
-                        console.log("moarTLS Analyzer: Credit Card field in non-secure context; name=" + oSensitiveFields[i].name + "; id=" + oSensitiveFields[i].id);
-                        cSensitiveFields++;
-                        oSensitiveFields[i].classList.add("moarTLSSensitive");
-                        oSensitiveFields[i].title = "WARNING: Credit Card Field in a Non-Secure Context";
-                    }
-                }
-            }
-
-            // If any fields, show the "future" origin chip warning
-            // TODO: Log field names
-            if (cSensitiveFields > 0)
-            {
-                let uiNotSecure = document.getElementById("uiNotSecure");
-                if (uiNotSecure)
-                {
-                    document.getElementById('uiNotSecure').style.visibility = "visible";
-                }
-                else
-                {
-                    uiNotSecure = document.createElement("img");
-                    uiNotSecure.src = chrome.extension.getURL("/images/SensitiveForm.png");
-                    uiNotSecure.classList.add("moarTLSFieldWarning");
-                    uiNotSecure.id="uiNotSecure";
-                    document.body.appendChild(uiNotSecure);
-
-                    uiNotSecure.addEventListener("click", () => { document.getElementById('uiNotSecure').style.visibility = "hidden"; }, null);
-                }
-            }
-         } catch (e) { console.log('Failed to detect nonsecure inputs. ' + e); }
-    }
-
     findUnsecureImages();
 
     {
