@@ -24,10 +24,10 @@ img.moarTLSFieldWarning {
 
 @keyframes moarTLSOrangepulse {
   0% {
-    background: #FFE7CE; !important;
+    background: #FFE7CE !important;
   }
   100% {
-    background: #FF8000; !important;
+    background: #FF8000 !important;
     box-shadow: 0 0 15px 1px #FF8000
   }
 }
