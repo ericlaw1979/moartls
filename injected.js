@@ -46,7 +46,7 @@
     {
         // Entire frame is unsecure?
         const sProt = document.location.protocol.toLowerCase();
-        if ((document.body) && 
+        if ((document.body) &&
             ((sProt === "http:") || (sProt === "ftp:"))) {
               document.body.classList.add("moarTLSUnsecure");
         }
@@ -79,15 +79,15 @@
     }
 
     {
-        let sSelector = "* /deep/ form[action]";
+        let sSelector = "* form[action]";
         if (typeof browser !== 'undefined') sSelector = "form[action]";
         const forms = document.querySelectorAll(sSelector);
         for (let i = 0; i < forms.length; i++) {
           const thisForm = forms[i];
           if (thisForm.getAttribute("action")[0] === "#") continue; // Not a cross-page 'action'
           cLinks++;
-          const sUri = unwrapUri((typeof thisForm.action === "string") ? 
-                                                    thisForm.action.toLowerCase() 
+          const sUri = unwrapUri((typeof thisForm.action === "string") ?
+                                                    thisForm.action.toLowerCase()
                                                   : thisForm.getAttribute("action").toLowerCase());
           if (isNonsecure(sUri)) {
             arrUnsecure.push(sUri);
@@ -98,7 +98,7 @@
     }
 
     {
-        let sSelector = "* /deep/ a[href]";
+        let sSelector = "* a[href]";
         if (typeof browser !== 'undefined') sSelector = "a[href]";
         const lnks = document.querySelectorAll(sSelector);
         for (let i = 0; i < lnks.length; i++) {

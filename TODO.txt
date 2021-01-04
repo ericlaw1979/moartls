@@ -1,5 +1,9 @@
 HTTP BAD - Detect CC and Password
 
+
+NOTE: DEEP SELECTOR NO LONGER WORKS. :(
+https://bugs.chromium.org/p/chromium/issues/detail?id=937746#c99
+
 Password is easy:
 	document.querySelectorAll("* /deep/ input[type='password']");
 
@@ -20,7 +24,7 @@ Credit card is complex:
 
 =================
 
-if (typeof msBrowser !== 'undefined') { chrome = msBrowser; } else if (typeof browser !== 'undefined') {	chrome = browser;} 
+if (typeof msBrowser !== 'undefined') { chrome = msBrowser; } else if (typeof browser !== 'undefined') {	chrome = browser;}
 
 scroll link into view
 run CSS / HTML / Script lint
@@ -28,11 +32,11 @@ run CSS / HTML / Script lint
 0. Inject NOSY image?
 1. Hash file downloads (https://developer.chrome.com/extensions/nativeMessaging#native-messaging-host)
 
-You should always provide a 128x128 icon; it's used during installation and by the Chrome Web Store. 
-Extensions should also provide a 48x48 icon, which is used in the extensions management page (chrome://extensions). 
+You should always provide a 128x128 icon; it's used during installation and by the Chrome Web Store.
+Extensions should also provide a 48x48 icon, which is used in the extensions management page (chrome://extensions).
 You can also specify a 16x16 icon to be used as the favicon for an extension's pages.
 
-Use PNG format, transparency is good. 
+Use PNG format, transparency is good.
 
 "icons": { "16": "icon16.png",
            "48": "icon48.png",
