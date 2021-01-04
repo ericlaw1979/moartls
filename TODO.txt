@@ -1,3 +1,7 @@
+TODO: Reintroduce support for poking into ShadowDOMs; see https://bugs.chromium.org/p/chromium/issues/detail?id=778816#c25
+
+
+
 HTTP BAD - Detect CC and Password
 
 
