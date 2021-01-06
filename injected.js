@@ -79,9 +79,7 @@
     }
 
     {
-        let sSelector = "* form[action]";
-        if (typeof browser !== 'undefined') sSelector = "form[action]";
-        const forms = document.querySelectorAll(sSelector);
+        const forms = document.querySelectorAll("form[action]");
         for (let i = 0; i < forms.length; i++) {
           const thisForm = forms[i];
           if (thisForm.getAttribute("action")[0] === "#") continue; // Not a cross-page 'action'
@@ -98,9 +96,7 @@
     }
 
     {
-        let sSelector = "* a[href]";
-        if (typeof browser !== 'undefined') sSelector = "a[href]";
-        const lnks = document.querySelectorAll(sSelector);
+        const lnks = document.querySelectorAll("a[href]");
         for (let i = 0; i < lnks.length; i++) {
           const thisLink = lnks[i];
           if (thisLink.getAttribute("href")[0] === "#") continue; // Not a cross-page 'link'
