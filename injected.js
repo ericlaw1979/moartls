@@ -99,9 +99,23 @@
         const lnks = document.querySelectorAll("a[href]");
         for (let i = 0; i < lnks.length; i++) {
           const thisLink = lnks[i];
-          if (thisLink.getAttribute("href")[0] === "#") continue; // Not a cross-page 'link'
+          let sUnwrapped;
+          if (thisLink.getAttribute("href")[0] === "#") {
+            // Some funky page framework leaves all hrefs at #
+            // and stores the true URL in a |data-url| attribute.
+            if (thisLink.getAttribute("href").length === 1 && 
+                thisLink.getAttribute("data-url")) {
+              sUnwrapped = unwrapUri(thisLink.getAttribute("data-url"));
+            }
+            else {
+              continue; // Not a cross-page 'link'
+            }
+          }
+          else {
+            sUnwrapped = unwrapUri(thisLink.href);
+          }
+
           cLinks++;
-          const sUnwrapped = unwrapUri(thisLink.href);
           if (isNonsecure(sUnwrapped)) {
             arrUnsecure.push(sUnwrapped);
             const oUnwrapped = document.createElement("a");
