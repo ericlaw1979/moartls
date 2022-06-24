@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // If HTTP/HTTPS, use XHR to check for HSTS
             if ((sProt == "http:") || (sProt == "https:"))
             {
-                // TODO: This doesn't work in Manifest v3--------------------------
+                // TODO: Switch XHR over to fetch() so that we're fully buzzword compliant.
                 const oReq = new XMLHttpRequest();
                 oReq.addEventListener("load",  function() { 
                     const sHSTS = oReq.getResponseHeader("Strict-Transport-Security"); 
