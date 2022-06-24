@@ -20,9 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     chrome.tabs.query({active: true, currentWindow: true }, function(activeTabs) {
         if (activeTabs.length < 1) return; // impossible?
+        const activeTab = activeTabs[0];
 
         const oUri = document.createElement("a");
-        oUri.href = activeTabs[0].url;
+        oUri.href = activeTab.url;
         const sOrigin = "https://" + oUri.host +"/";
 
         const sProt = oUri.protocol.toLowerCase();
@@ -68,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // If HTTP/HTTPS, use XHR to check for HSTS
             if ((sProt == "http:") || (sProt == "https:"))
             {
+                // TODO: This doesn't work in Manifest v3--------------------------
                 const oReq = new XMLHttpRequest();
                 oReq.addEventListener("load",  function() { 
                     const sHSTS = oReq.getResponseHeader("Strict-Transport-Security"); 
@@ -95,21 +97,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById("txtStatus").textContent = "Analyzing page elements";
 
-        chrome.tabs.insertCSS(null, {file:"injected.css", allFrames: true, runAt:"document_idle"}, function() {
+        
+        chrome.scripting.insertCSS({
+            target: {tabId: activeTab.id, allFrames: true}, files: ["injected.css"]
+	});
+    
+    
+    /* TODO REstore error handling after we learn how 
+
             // If you try to inject into an extensions page or the webstore/NTP you'll get an error
             if (chrome.runtime.lastError) {
                 console.log('moarTLS error injecting css : \n' + chrome.runtime.lastError.message);
                 chrome.runtime.sendMessage(null, {"error": chrome.runtime.lastError.message, "context": "insertCSS"});
             }
-        });
+        });*/
 
+        
+        // https://developer.chrome.com/docs/extensions/mv3/intro/mv3-migration/#cs-static-file
+        chrome.scripting.executeScript({
+            target: {tabId: activeTab.id, allFrames: true}, files: ['injected.js']
+	});
+
+	/* TODO: Restore error handling after we learn how
         chrome.tabs.executeScript(null, {file:"injected.js", allFrames: true, runAt:"document_idle"}, function() {
             // If you try to inject into an extensions page or the webstore/NTP you'll get an error
             if (chrome.runtime.lastError) {
                 console.log('moarTLS error injecting script : \n' + chrome.runtime.lastError.message);
                 chrome.runtime.sendMessage(null, {"error": chrome.runtime.lastError.message, "context": "executeScript"});
             }
-        });
+        });*/
 
     });
 }, false);
