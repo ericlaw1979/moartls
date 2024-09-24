@@ -27,7 +27,8 @@ chrome.downloads.onCreated.addListener(function(item) {
     // TODO: Can we do anything useful with the item.mime property?
     //
     if (item.state == "in_progress") {
-        chrome.storage.sync.get(["bWarnOnNonSecureDownloads"], function(bWarnOnNonSecureDownloads) {
+        const storage = (chrome.storage.sync ? chrome.storage.sync : chrome.storage.local);
+        storage.get(["bWarnOnNonSecureDownloads"], function(bWarnOnNonSecureDownloads) {
             if (!bWarnOnNonSecureDownloads) return;
 
             if ((item.url.substring(0, 5) == "http:") || 
@@ -38,11 +39,11 @@ chrome.downloads.onCreated.addListener(function(item) {
                 // Manifest v3 does not support alert(), so we need to use a notification.
                 var options = {
         			type: 'basic',
-        			title: 'Non-Secure Download Was Detected',
+        			title: 'Non-Secure Download was detected',
         			message: `Download of:\n${item.url}${sReferer}`,
         			iconUrl: 'images/icon128.png'
         		};
-		    chrome.notifications.create(options);
+		        chrome.notifications.create(options);
             }
         });
     }
